@@ -25,9 +25,10 @@ pipeline{
 				script {
 				    def pom = readMavenPom file: 'pom.xml'
                     projectVersion=pom.version
-                    echo "Project Version: ${projectVersion}"			
-					withSonarQubeEnv() {
-						bat "mvn ${SONAR_MAVEN_GOAL}"
+                    echo "Project Version: ${projectVersion}"
+					def scannerHome = tool 'SonarQube_Scanner';					
+					withSonarQubeEnv('SonarQube') {
+						bat "${scannerHome}/bin/sonar-scanner -Dsonar.projectName=EmployeeManagment -Dsonar.projectKey=com.employee.management:employee-management -Dsonar.jacoco.reportPaths=target/coverage-reports/jacoco-it.exec,target/coverage-reports/jacoco-ut.exec -Dsonar.sources=src -Dsonar.language=java -Dsonar.projectVersion=${projectVersion} -Dsonar.java.binaries=target/classes -Dsonar.branch.name=${params.checkoutBranch} -Dsonar.java.coveragePlugin=jacoco -Dsonar.junit.reportPaths=target/surefire-reports,target/failsafe-reports -Dsonar.coverage.exclusions=**/*test/** -Dsonar.cpd.exclusions=**/*test/** -Dsonar.exclusions=**/*test/**"
 					}
 				}
 			}
