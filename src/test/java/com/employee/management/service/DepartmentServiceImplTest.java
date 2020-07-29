@@ -1,6 +1,7 @@
 package com.employee.management.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class DepartmentServiceImplTest {
 		Assert.assertEquals(list, dptlist);
 		Mockito.verify(list).add(departmentOne);
 		Mockito.verify(list).add(departmentTwo);
-		verify(departmentRepository).findAll();
+		verify(departmentRepository,only()).findAll();
 		assertEquals(2, list.size());
 		//Mocking the behaviour of the size method of the list
 	    Mockito.doReturn(100).when(list).size();
@@ -94,7 +95,7 @@ public class DepartmentServiceImplTest {
 		Assert.assertEquals(departmentOne, department);
 		Assert.assertEquals(departmentOne.getDepartment_ID(), department.getDepartment_ID());
 		Assert.assertEquals(departmentOne.getDepartment_Name(), department.getDepartment_Name());
-		verify(departmentRepository).findById(Mockito.anyInt());
+		verify(departmentRepository,only()).findById(Mockito.anyInt());
 
 	}
 
@@ -102,7 +103,7 @@ public class DepartmentServiceImplTest {
 	public void testSaveUser() {
 		Mockito.when(departmentRepository.save(Mockito.any(Department.class))).thenReturn(departmentOne);
 		departmentService.addDepartment(departmentOne);
-		verify(departmentRepository).save(Mockito.any(Department.class));
+		verify(departmentRepository,only()).save(Mockito.any(Department.class));
 	}
 
 	/* Sample example to show how to mock void method */
@@ -110,7 +111,7 @@ public class DepartmentServiceImplTest {
 	public void testdeleteAllEmployees() {
 		Mockito.doNothing().when(departmentRepository).deleteAll();
 		departmentService.deleteAllDepartment();
-		verify(departmentRepository).deleteAll();
+		verify(departmentRepository,only()).deleteAll();
 	}
 
 	/* Sample example to show how to mock void method */
@@ -118,7 +119,7 @@ public class DepartmentServiceImplTest {
 	public void testdeleteEmployeeById() {
 		Mockito.doNothing().when(departmentRepository).deleteById(Mockito.anyInt());
 		departmentService.deleteDepartmentByID(4);
-		verify(departmentRepository).deleteById(Mockito.anyInt());
+		verify(departmentRepository,only()).deleteById(Mockito.anyInt());
 	}
 
 	@Test
@@ -126,7 +127,7 @@ public class DepartmentServiceImplTest {
 		Department deparmentThree = new Department(7, "PQR Department", "PQR");
 		Mockito.when(departmentRepository.save(Mockito.any(Department.class))).thenReturn(deparmentThree);
 		departmentService.updateDepartment(departmentOne, 7);
-		verify(departmentRepository).save(Mockito.any(Department.class));
+		verify(departmentRepository,only()).save(Mockito.any(Department.class));
 	}
 
 }

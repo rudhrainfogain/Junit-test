@@ -32,17 +32,21 @@ public class DepartmentController {
 	public List<Department> getAllDepartment() {
 		return departmentService.getAllDepartments();
 	}
+
 	// display HardcodedData
 	@GetMapping("/hardcodeddepartments")
 	public List<Department> getHarcodedDepartment() {
-		return departmentService.getHarcodedEmployeeList();
+		if (departmentService.getHarcodedEmployeeList() != null) {
+			return departmentService.getHarcodedEmployeeList();
+		}
+		return null;
 	}
 
 	// displaying department by id
 	@GetMapping("/departments/{id}")
 	public Department getDepartment(@PathVariable int id) {
 		if (id <= -1) {
-			 throw new DepartmentException(DepartmentErrorCodes.DEPARTMENT_ID_EXCEPTION);
+			throw new DepartmentException(DepartmentErrorCodes.DEPARTMENT_ID_EXCEPTION);
 		} else {
 			return departmentService.getDepartment(id);
 		}
@@ -52,7 +56,7 @@ public class DepartmentController {
 	@PostMapping("/adddepartments")
 	public void addDepartment(@RequestBody Department department) {
 		if (department.getDepartment_Name().isEmpty()) {
-             throw new DepartmentException(DepartmentErrorCodes.DEPARTMENT_NAME_EXCEPTION);
+			throw new DepartmentException(DepartmentErrorCodes.DEPARTMENT_NAME_EXCEPTION);
 		} else {
 			departmentService.addDepartment(department);
 		}
@@ -61,7 +65,9 @@ public class DepartmentController {
 	// updating department by id
 	@PutMapping("/departments/{id}")
 	public void updateDepartment(@RequestBody Department d, @PathVariable int id) {
-		departmentService.updateDepartment(d, id);
+		if (departmentService.getDepartment(id) != null) {
+			departmentService.updateDepartment(d, id);
+		}
 	}
 
 	// deleting all department
@@ -81,6 +87,5 @@ public class DepartmentController {
 	public void patchDepartmentByID(@RequestBody Department d, @PathVariable int id) {
 		departmentService.patchDepartment(d, id);
 	}
-	
-	
+
 }

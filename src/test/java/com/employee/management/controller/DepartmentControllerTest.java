@@ -2,6 +2,7 @@ package com.employee.management.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -108,12 +109,14 @@ public class DepartmentControllerTest {
 	@Test
 	public void testGetHarcodedEmployeeList() {
 		List<Department> expectedlist = new ArrayList<>();
-		list.add(new Department(10, "XYZ Departemnt", "XYZ"));
+		expectedlist.add(new Department(10, "XYZ Departemnt", "XYZ"));
 		Mockito.doCallRealMethod().when(departmentService).getHarcodedEmployeeList();
 		List<Department> dptlist = DepartmentController.getHarcodedDepartment();
 		Assert.assertNotNull(dptlist);
 		assertEquals(expectedlist.size(), dptlist.size());
-		verify(departmentService).getHarcodedEmployeeList();
+		/* Sample example to show that the mocked method is called 2 no of times */
+		verify(departmentService, times(2)).getHarcodedEmployeeList();
+		verifyNoMoreInteractions(departmentService);
 	}
 
 	@Test
@@ -172,31 +175,34 @@ public class DepartmentControllerTest {
 	public void testAddEmployee() {
 		Mockito.doNothing().when(departmentService).addDepartment(Mockito.any(Department.class));
 		DepartmentController.addDepartment(departmentOne);
-		verify(departmentService).addDepartment(Mockito.any(Department.class));
+		verify(departmentService, only()).addDepartment(Mockito.any(Department.class));
 		System.out.println("testAddEmployee");
 	}
 
 	@Test
 	public void testUpdateEmployee() {
-		Mockito.doNothing().when(departmentService).updateDepartment(Mockito.any(Department.class), Mockito.anyInt());
-		DepartmentController.updateDepartment(departmentOne, 9);
+		when(departmentService.getDepartment(Mockito.anyInt())).thenReturn(departmentOne);
+		Mockito.doNothing().when(departmentService).updateDepartment(Mockito.<Department>any(), Mockito.anyInt());
+		DepartmentController.updateDepartment(departmentOne, 7);
+		verify(departmentService).getDepartment(Mockito.anyInt());
 		verify(departmentService).updateDepartment(Mockito.any(Department.class), Mockito.anyInt());
+		verifyNoMoreInteractions(departmentService);
 		System.out.println("testUpdateEmployee");
 	}
 
 	@Test
 	public void testDeleteAllEmployees() {
-		Mockito.doNothing().when(departmentService).deleteAllDepartment();
+		// Mockito.doNothing().when(departmentService).deleteAllDepartment();
 		DepartmentController.deleteAllDepartments();
-		verify(departmentService).deleteAllDepartment();
+		verify(departmentService, only()).deleteAllDepartment();
 		System.out.println("testDeleteAllEmployees");
 	}
 
 	@Test
 	public void testDeleteEmployeeById() {
-		Mockito.doNothing().when(departmentService).deleteDepartmentByID(Mockito.anyInt());
+		// Mockito.doNothing().when(departmentService).deleteDepartmentByID(Mockito.anyInt());
 		DepartmentController.deleteDepartmentByID(departmentOne, 7);
-		verify(departmentService).deleteDepartmentByID(Mockito.anyInt());
+		verify(departmentService, only()).deleteDepartmentByID(Mockito.anyInt());
 		System.out.println("testDeleteEmployeeById");
 	}
 
@@ -207,10 +213,10 @@ public class DepartmentControllerTest {
 	// @Ignore
 	@Test
 	public void testPatchEmployeeById() {
-		Mockito.doNothing().when(departmentService).patchDepartment(Mockito.any(Department.class), Mockito.anyInt());
+		// Mockito.doNothing().when(departmentService).patchDepartment(Mockito.any(Department.class),
+		// Mockito.anyInt());
 		DepartmentController.patchDepartmentByID(departmentOne, 7);
-		verify(departmentService).patchDepartment(Mockito.any(Department.class), Mockito.anyInt());
-
+		verify(departmentService, only()).patchDepartment(Mockito.any(Department.class), Mockito.anyInt());
 		System.out.println("testPatchEmployeeById");
 	}
 
