@@ -27,7 +27,7 @@ pipeline{
                     projectVersion=pom.version
                     echo "Project Version: ${projectVersion}"			
 					withSonarQubeEnv() {
-						bat "${SONAR_MAVEN_GOAL}"
+						bat "mvn ${SONAR_MAVEN_GOAL}"
 					}
 				}
 			}
