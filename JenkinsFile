@@ -1,0 +1,52 @@
+library 'reference-pipeline'
+
+pipeline{
+
+ agent any
+
+	parameters {
+		gitParameter(branch: '', branchFilter: '.*', defaultValue: 'origin/master', description: 'Branch to take checkout and run  pipeline on', listSize: '10', name: 'checkoutBranch', quickFilterEnabled: true, selectedValue: 'NONE', sortMode: 'NONE', tagFilter: '*', type: 'PT_BRANCH')
+	}
+
+	stages{
+		stage('checkout'){
+			steps{
+					checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: "${params.checkoutBranch}"]], browser: [$class: 'GitLabBrowser'], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout', deleteUntrackedNestedRepositories: true]], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/rudhrainfogain/Junit-test.git']]]
+			}
+		}
+
+		stage('Build'){
+			steps {
+				echo "This is the build step"
+				sh "mvn clean package verify -U"
+			}
+		}
+
+		stage('SonarCube') {
+			steps {
+				script {
+				    def pom = readMavenPom file: 'pom.xml'
+                    projectVersion=pom.version
+                    echo "Project Version: ${projectVersion}"
+					def scannerHome = tool 'SonarQube_Scanner';
+					withSonarQubeEnv('SonarQube') {
+						sh "${scannerHome}/bin/sonar-scanner
+						-Dsonar.projectName=RTPeripherals -Dsonar.projectKey=com.employee.management:employee-management -Dsonar.jacoco.reportPaths=target/coverage-reports/jacoco-it.exec,target/coverage-reports/jacoco-ut.exec 
+						-Dsonar.sources=src -Dsonar.language=java -Dsonar.projectVersion=${projectVersion} -Dsonar.java.binaries=target/classes -Dsonar.java.test.binaries=target/test-classes -Dsonar.junit.reportPaths=target/surefire-reports,target/failsafe-reports -Dsonar.coverage.exclusions=**/*test/** -Dsonar.cpd.exclusions=**/*test/** -Dsonar.exclusions=**/*test/** -Dsonar.java.coveragePlugin=jacoco -Dsonar.branch.name=${params.checkoutBranch}"
+					}
+				}
+			}
+		}
+
+		stage("Sonar Quality Gate Analysis") {
+			steps {
+				echo "Analysis for Code Quality Results from Sonar Qube"
+				timeout(time: 1, unit: 'HOURS') {
+					// Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+					// true = set pipeline to UNSTABLE, false = don't
+					waitForQualityGate abortPipeline: true
+				}
+			}
+		}
+	}
+}
