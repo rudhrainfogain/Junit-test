@@ -20,6 +20,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import com.employee.management.model.Department;
 import com.employee.management.repository.DepartmentRepository;
+
 /* To Enable Mockito Annotations :
 Need to annotate the JUnit test with a runner– MockitoJUnitRunner
 Example:
@@ -45,7 +46,6 @@ public class DepartmentServiceImplTest {
 	DepartmentServiceImpl departmentService;
 
 	Department departmentOne, departmentTwo;
-	
 
 	/*
 	 * @Spy annotation is used to create a real object and spy on that real object.
@@ -80,11 +80,11 @@ public class DepartmentServiceImplTest {
 		Assert.assertEquals(list, dptlist);
 		Mockito.verify(list).add(departmentOne);
 		Mockito.verify(list).add(departmentTwo);
-		verify(departmentRepository,only()).findAll();
+		verify(departmentRepository, only()).findAll();
 		assertEquals(2, list.size());
-		//Mocking the behaviour of the size method of the list
-	    Mockito.doReturn(100).when(list).size();
-	    assertEquals(100, list.size());
+		// Mocking the behaviour of the size method of the list
+		Mockito.doReturn(100).when(list).size();
+		assertEquals(100, list.size());
 	}
 
 	@Test
@@ -95,7 +95,7 @@ public class DepartmentServiceImplTest {
 		Assert.assertEquals(departmentOne, department);
 		Assert.assertEquals(departmentOne.getDepartment_ID(), department.getDepartment_ID());
 		Assert.assertEquals(departmentOne.getDepartment_Name(), department.getDepartment_Name());
-		verify(departmentRepository,only()).findById(Mockito.anyInt());
+		verify(departmentRepository, only()).findById(Mockito.anyInt());
 
 	}
 
@@ -103,23 +103,31 @@ public class DepartmentServiceImplTest {
 	public void testSaveUser() {
 		Mockito.when(departmentRepository.save(Mockito.any(Department.class))).thenReturn(departmentOne);
 		departmentService.addDepartment(departmentOne);
-		verify(departmentRepository,only()).save(Mockito.any(Department.class));
+		verify(departmentRepository, only()).save(Mockito.any(Department.class));
 	}
 
 	/* Sample example to show how to mock void method */
 	@Test
 	public void testdeleteAllEmployees() {
-		Mockito.doNothing().when(departmentRepository).deleteAll();
+		/*
+		 * No need to mock the behaviour for the void method as in case of mock object it doesn't
+		 * call the void method.unlike spy call the real method when we don't mock the behaviour of the method.
+		 */
+		// Mockito.doNothing().when(departmentRepository).deleteAll();
 		departmentService.deleteAllDepartment();
-		verify(departmentRepository,only()).deleteAll();
+		verify(departmentRepository, only()).deleteAll();
 	}
 
 	/* Sample example to show how to mock void method */
 	@Test
 	public void testdeleteEmployeeById() {
-		Mockito.doNothing().when(departmentRepository).deleteById(Mockito.anyInt());
+		/*
+		 * No need to mock the behaviour for the void method as in case of mock object it doesn't
+		 * call the void method.unlike spy call the real method when we don't mock the behaviour of the method.
+		 */
+		// Mockito.doNothing().when(departmentRepository).deleteById(Mockito.anyInt());
 		departmentService.deleteDepartmentByID(4);
-		verify(departmentRepository,only()).deleteById(Mockito.anyInt());
+		verify(departmentRepository, only()).deleteById(Mockito.anyInt());
 	}
 
 	@Test
@@ -127,7 +135,7 @@ public class DepartmentServiceImplTest {
 		Department deparmentThree = new Department(7, "PQR Department", "PQR");
 		Mockito.when(departmentRepository.save(Mockito.any(Department.class))).thenReturn(deparmentThree);
 		departmentService.updateDepartment(departmentOne, 7);
-		verify(departmentRepository,only()).save(Mockito.any(Department.class));
+		verify(departmentRepository, only()).save(Mockito.any(Department.class));
 	}
 
 }

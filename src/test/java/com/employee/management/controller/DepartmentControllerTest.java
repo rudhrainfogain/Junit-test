@@ -21,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 
 import com.employee.management.error.DepartmentErrorCodes;
 import com.employee.management.exception.DepartmentException;
@@ -192,7 +193,6 @@ public class DepartmentControllerTest {
 
 	@Test
 	public void testDeleteAllEmployees() {
-		// Mockito.doNothing().when(departmentService).deleteAllDepartment();
 		DepartmentController.deleteAllDepartments();
 		verify(departmentService, only()).deleteAllDepartment();
 		System.out.println("testDeleteAllEmployees");
@@ -200,7 +200,6 @@ public class DepartmentControllerTest {
 
 	@Test
 	public void testDeleteEmployeeById() {
-		// Mockito.doNothing().when(departmentService).deleteDepartmentByID(Mockito.anyInt());
 		DepartmentController.deleteDepartmentByID(departmentOne, 7);
 		verify(departmentService, only()).deleteDepartmentByID(Mockito.anyInt());
 		System.out.println("testDeleteEmployeeById");
@@ -213,8 +212,6 @@ public class DepartmentControllerTest {
 	// @Ignore
 	@Test
 	public void testPatchEmployeeById() {
-		// Mockito.doNothing().when(departmentService).patchDepartment(Mockito.any(Department.class),
-		// Mockito.anyInt());
 		DepartmentController.patchDepartmentByID(departmentOne, 7);
 		verify(departmentService, only()).patchDepartment(Mockito.any(Department.class), Mockito.anyInt());
 		System.out.println("testPatchEmployeeById");
