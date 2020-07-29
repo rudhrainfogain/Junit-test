@@ -27,7 +27,7 @@ pipeline{
                     projectVersion=pom.version
                     echo "Project Version: ${projectVersion}"			
 					withSonarQubeEnv() {
-						bat "${SONAR_MAVEN_GOAL} -Dsonar.projectName=EmployeeManagment -Dsonar.projectKey=com.employee.management:employee-management -Dsonar.jacoco.reportPaths=target/coverage-reports/jacoco-it.exec,target/coverage-reports/jacoco-ut.exec -Dsonar.sources=src -Dsonar.language=java -Dsonar.projectVersion=${projectVersion} -Dsonar.java.binaries=target/classes  -Dsonar.java.coveragePlugin=jacoco -Dsonar.branch.name=${params.checkoutBranch}"
+						bat "${SONAR_MAVEN_GOAL} -Dsonar.projectName=EmployeeManagment -Dsonar.projectKey=com.employee.management:employee-management -Dsonar.jacoco.reportPaths=target/coverage-reports/jacoco-it.exec,target/coverage-reports/jacoco-ut.exec -Dsonar.sources=src -Dsonar.language=java -Dsonar.projectVersion=${projectVersion} -Dsonar.java.binaries=target/classes -Dsonar.branch.name=${params.checkoutBranch}"
 					}
 				}
 			}
