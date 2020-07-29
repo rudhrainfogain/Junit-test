@@ -1,5 +1,3 @@
-library 'reference-pipeline'
-
 pipeline{
 
  agent any
