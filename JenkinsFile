@@ -16,7 +16,7 @@ pipeline{
 		stage('Build'){
 			steps {
 				echo "This is the build step"
-				sh "mvn clean package verify -U"
+				sh "mvn clean package verify"
 			}
 		}
 
