@@ -21,7 +21,25 @@
 *.classpath
 *.factorypath
 *.project
-*.settings/**
+target
+.project
+.classpath
+.settings
+.metadata/
+.springBeans
+.factorypath
+src/main/resources/static/*
+# intellij files
+*.iws
+*.iml
+*.ipr
+*.ids
+*/*.iws
+*/*.ipr
+.idea/
+.ideaDataSources/
+dataSources/
+*.exec
 
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
