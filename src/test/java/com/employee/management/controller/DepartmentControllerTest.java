@@ -1,7 +1,9 @@
 package com.employee.management.controller;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
@@ -60,7 +62,7 @@ public class DepartmentControllerTest {
 	static Department departmentOne;
 
 	static Department departmentTwo;
-	
+
 	Department departmentThree;
 	static Optional<Department> deparmentOptional;
 
@@ -105,9 +107,12 @@ public class DepartmentControllerTest {
 
 	@Test
 	public void testGetHarcodedEmployeeList() {
+		List<Department> expectedlist = new ArrayList<>();
+		list.add(new Department(10, "XYZ Departemnt", "XYZ"));
 		Mockito.doCallRealMethod().when(departmentService).getHarcodedEmployeeList();
 		List<Department> dptlist = DepartmentController.getHarcodedDepartment();
 		Assert.assertNotNull(dptlist);
+		assertEquals(expectedlist.size(), dptlist.size());
 		verify(departmentService).getHarcodedEmployeeList();
 	}
 
@@ -117,7 +122,15 @@ public class DepartmentControllerTest {
 		List<Department> departmentList = DepartmentController.getAllDepartment();
 		Assert.assertEquals(list.size(), departmentList.size());
 		Assert.assertEquals(list, departmentList);
+		/*
+		 * Allows checking if given method was the only one invoked. E.g:
+		 * 
+		 * verify(mock, only()).someMethod(); //above is a shorthand for following 2
+		 * lines of code: verify(mock).someMethod(); verifyNoMoreInteractions(mock);
+		 * 
+		 */
 		verify(departmentService).getAllDepartments();
+		verifyNoMoreInteractions(departmentService);
 		System.out.println("testGetAllEmployees");
 	}
 
@@ -128,7 +141,17 @@ public class DepartmentControllerTest {
 		Assert.assertEquals(departmentOne.getDepartment_Name(), department.getDepartment_Name());
 		Assert.assertEquals(departmentOne.getShort_Name(), department.getShort_Name());
 		Assert.assertEquals(departmentOne.getDepartment_ID(), department.getDepartment_ID());
-		verify(departmentService).getDepartment(Mockito.anyInt());
+		/*
+		 * Allows checking if given method was the only one invoked. E.g:
+		 * 
+		 * verify(mock, only()).someMethod();
+		 * 
+		 * //above is a shorthand for following 2 lines of code:
+		 * 
+		 * verify(mock).someMethod(); verifyNoMoreInteractions(mock);
+		 * 
+		 */
+		verify(departmentService, only()).getDepartment(Mockito.anyInt());
 		System.out.println("testGetEmployee");
 	}
 
@@ -187,6 +210,7 @@ public class DepartmentControllerTest {
 		Mockito.doNothing().when(departmentService).patchDepartment(Mockito.any(Department.class), Mockito.anyInt());
 		DepartmentController.patchDepartmentByID(departmentOne, 7);
 		verify(departmentService).patchDepartment(Mockito.any(Department.class), Mockito.anyInt());
+
 		System.out.println("testPatchEmployeeById");
 	}
 

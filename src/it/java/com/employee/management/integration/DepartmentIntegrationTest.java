@@ -139,11 +139,7 @@ public class DepartmentIntegrationTest {
 					.perform(MockMvcRequestBuilders.post("/adddepartments").content(getJsonFromRequest(addedDepartment))
 							.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
 					.andExpect(status().isBadRequest()).andReturn();
-
-			Optional<DepartmentException> departmentExcepton = Optional
-					.ofNullable((DepartmentException) result.getResolvedException());
-			departmentExcepton.ifPresent((se) -> assertThat(se, is(notNullValue())));
-			departmentExcepton.ifPresent((se) -> assertThat(se, is(instanceOf(DepartmentException.class))));
+			result.getResponse().getContentAsString();
 			assertEquals(expectedErrorCode.getMessage(), result.getResolvedException().getMessage());
 		} catch (Exception e) {
 			fail(e.getMessage());
