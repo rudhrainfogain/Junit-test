@@ -18,6 +18,7 @@ public class DepartmentServiceMock implements DepartmentService {
 	public List<Department> getAllDepartments() {
 		List<Department> list = new ArrayList<>();
 		list.add(new Department(10,"XYZ Departemnt","XYZ"));
+		list.add(new Department(12,"ABC Departemnt","ABC"));
 		return list;
 	}
 

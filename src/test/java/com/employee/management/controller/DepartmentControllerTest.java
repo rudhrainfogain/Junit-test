@@ -219,7 +219,7 @@ public class DepartmentControllerTest {
 
 	/*
 	 * This is the sample test case to test the exception scenario using try catch
-	 * in the test method
+	 * in the test method and also we can verify about the exception messages and error codes using this approach 
 	 * 
 	 */
 	@Test
@@ -230,6 +230,7 @@ public class DepartmentControllerTest {
 			departmentThree = new Department(-4, "ABC Department", "ABC");
 			DepartmentController.addDepartment(departmentThree);
 		} catch (DepartmentException exception) {
+			//add comment
 			assertEquals(expectedErrorCode, exception.getErrorCodes());
 			verifyZeroInteractions(departmentService);
 		}

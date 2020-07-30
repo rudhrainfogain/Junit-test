@@ -1,5 +1,6 @@
 package com.employee.management.integration;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -9,6 +10,7 @@ import static org.junit.Assert.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
@@ -145,12 +147,16 @@ public class DepartmentIntegrationTest {
 			fail(e.getMessage());
 		}
 	}
-	/* Sample example for the GET request returning the List */
+	/*
+	 * Sample example for the GET request returning the List of elements in any of
+	 * the given list
+	 */
 
 	@Test
 	public void testGetAllDepartment() {
 		try {
 			List<Department> expectedlist = new ArrayList<>();
+			expectedlist.add(new Department(12, "ABC Departemnt", "ABC"));
 			expectedlist.add(new Department(10, "XYZ Departemnt", "XYZ"));
 			ResultActions resultActions = mvc.perform(get("/departments")).andExpect(status().isOk())
 					.andExpect(content().contentType((MediaType.APPLICATION_JSON_UTF8)));
@@ -162,6 +168,66 @@ public class DepartmentIntegrationTest {
 					new TypeReference<List<Department>>() {
 					});
 			assertEquals(expectedlist.size(), departmentlist.size());
+			/*
+			 * 
+			 * Verifies that the actual group contains exactly the given values and nothing
+			 * else, in any order.
+			 */
+			assertThat(departmentlist).containsExactlyInAnyOrderElementsOf(expectedlist);
+
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
+	}
+	
+	/*
+	 * Sample example for the GET request returning the List of elements in same
+	 * order as expected  using containsExactlyElementsOf method
+	 */
+	@Test
+	public void testGetAllDepartmentUsingContainsExtactlySameOrder() {
+		try {
+			List<Department> expectedlist = new ArrayList<>();
+			expectedlist.add(new Department(10, "XYZ Departemnt", "XYZ"));
+			expectedlist.add(new Department(12, "ABC Departemnt", "ABC"));
+			ResultActions resultActions = mvc.perform(get("/departments")).andExpect(status().isOk())
+					.andExpect(content().contentType((MediaType.APPLICATION_JSON_UTF8)));
+			resultActions.andExpect(status().isOk());
+			ObjectMapper mapper = new ObjectMapper();
+			// JSON from file to Object
+			List<Department> departmentlist = mapper.readValue(
+					resultActions.andReturn().getResponse().getContentAsString(),
+					new TypeReference<List<Department>>() {
+					});
+			assertEquals(expectedlist.size(), departmentlist.size());
+			/*
+			 * 
+			 * Verifies that the actual group contains exactly the given values and nothing
+			 * else, in same order.
+			 */
+			assertThat(departmentlist).containsExactlyElementsOf(expectedlist);
+
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
+	}
+
+	/*
+	 * Sample example for the GET request returning the List of elements in same
+	 * order as expected and using json path to verify the order of the element in list
+	 */
+
+	@Test
+	public void testGetAllDepartmentUsingJsonPath() {
+		try {
+			mvc.perform(get("/departments")).andExpect(status().isOk())
+					.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+					.andExpect(jsonPath("$[0].department_ID", is(10)))
+					.andExpect(jsonPath("$[0].short_Name", is("XYZ Departemnt")))
+					.andExpect(jsonPath("$[0].department_Name", is("XYZ")))
+					.andExpect(jsonPath("$[1].department_ID", is(12)))
+					.andExpect(jsonPath("$[1].short_Name", is("ABC Departemnt")))
+					.andExpect(jsonPath("$[1].department_Name", is("ABC")));
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}

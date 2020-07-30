@@ -58,4 +58,39 @@ public class Department {
 		this.department_Name = department_Name;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + department_ID;
+		result = prime * result + ((department_Name == null) ? 0 : department_Name.hashCode());
+		result = prime * result + ((short_Name == null) ? 0 : short_Name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Department other = (Department) obj;
+		if (department_ID != other.department_ID)
+			return false;
+		if (department_Name == null) {
+			if (other.department_Name != null)
+				return false;
+		} else if (!department_Name.equals(other.department_Name))
+			return false;
+		if (short_Name == null) {
+			if (other.short_Name != null)
+				return false;
+		} else if (!short_Name.equals(other.short_Name))
+			return false;
+		return true;
+	}
+
+	
 }

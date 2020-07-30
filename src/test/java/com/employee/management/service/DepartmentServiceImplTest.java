@@ -110,8 +110,9 @@ public class DepartmentServiceImplTest {
 	@Test
 	public void testdeleteAllEmployees() {
 		/*
-		 * No need to mock the behaviour for the void method as in case of mock object it doesn't
-		 * call the void method.unlike spy call the real method when we don't mock the behaviour of the method.
+		 * No need to mock the behaviour for the void method as in case of mock object
+		 * it doesn't call the void method.unlike spy call the real method when we don't
+		 * mock the behaviour of the method.
 		 */
 		// Mockito.doNothing().when(departmentRepository).deleteAll();
 		departmentService.deleteAllDepartment();
@@ -122,8 +123,9 @@ public class DepartmentServiceImplTest {
 	@Test
 	public void testdeleteEmployeeById() {
 		/*
-		 * No need to mock the behaviour for the void method as in case of mock object it doesn't
-		 * call the void method.unlike spy call the real method when we don't mock the behaviour of the method.
+		 * No need to mock the behaviour for the void method as in case of mock object
+		 * it doesn't call the void method.unlike spy call the real method when we don't
+		 * mock the behaviour of the method.
 		 */
 		// Mockito.doNothing().when(departmentRepository).deleteById(Mockito.anyInt());
 		departmentService.deleteDepartmentByID(4);
