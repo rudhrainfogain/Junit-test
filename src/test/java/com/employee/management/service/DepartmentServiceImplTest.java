@@ -1,9 +1,5 @@
 package com.employee.management.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.only;
-import static org.mockito.Mockito.verify;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +16,12 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import com.employee.management.model.Department;
 import com.employee.management.repository.DepartmentRepository;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.verify;
+
+
 
 /* To Enable Mockito Annotations :
 Need to annotate the JUnit test with a runner– MockitoJUnitRunner
@@ -62,7 +64,7 @@ public class DepartmentServiceImplTest {
 	 */
 	@Spy
 	List<Department> list = new ArrayList<>();
-
+	
 	@Before
 	public void setUp() {
 		departmentOne = new Department(7, "XYZ Department", "XYZ");

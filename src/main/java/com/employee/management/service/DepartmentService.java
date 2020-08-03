@@ -27,4 +27,6 @@ public interface DepartmentService {
 	public void patchDepartment(Department d, int id);
 	
 	public List<Department> getHarcodedEmployeeList();
+	
+	public void printDetails(String dataToPrint);
 }

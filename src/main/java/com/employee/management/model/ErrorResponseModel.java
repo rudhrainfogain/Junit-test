@@ -5,9 +5,10 @@ public class ErrorResponseModel {
 	private String errorMesaage;
 	private String errorCode;
 
+	public ErrorResponseModel() {
+    }
 	
-	public ErrorResponseModel(String errorMesaage, String errorCode) {
-		super();
+    public ErrorResponseModel(String errorMesaage, String errorCode) {
 		this.errorMesaage = errorMesaage;
 		this.errorCode = errorCode;
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -12,12 +13,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.employee.management.error.DepartmentErrorCodes;
 import com.employee.management.exception.DepartmentException;
 import com.employee.management.model.Department;
 import com.employee.management.service.DepartmentService;
+import com.employee.management.utility.JSONUtility;
 
 @RestController
 public class DepartmentController {
@@ -88,4 +91,12 @@ public class DepartmentController {
 		departmentService.patchDepartment(d, id);
 	}
 
+	// printng department details
+    @GetMapping("/print")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void printDepartmentDetails() {
+        List<Department> allDepartments = departmentService.getAllDepartments();
+        String stringify = JSONUtility.stringify(allDepartments);
+        departmentService.printDetails(stringify);
+    }
 }

@@ -59,7 +59,7 @@ public class DepartmentControllerTest {
 	 * automatically.
 	 */
 	@InjectMocks
-	DepartmentController DepartmentController;
+	DepartmentController departmentController;
 
 	static Department departmentOne;
 
@@ -112,7 +112,7 @@ public class DepartmentControllerTest {
 		List<Department> expectedlist = new ArrayList<>();
 		expectedlist.add(new Department(10, "XYZ Departemnt", "XYZ"));
 		Mockito.doCallRealMethod().when(departmentService).getHarcodedEmployeeList();
-		List<Department> dptlist = DepartmentController.getHarcodedDepartment();
+		List<Department> dptlist = departmentController.getHarcodedDepartment();
 		Assert.assertNotNull(dptlist);
 		assertEquals(expectedlist.size(), dptlist.size());
 		/* Sample example to show that the mocked method is called 2 no of times */
@@ -123,7 +123,7 @@ public class DepartmentControllerTest {
 	@Test
 	public void testGetAllEmployees() {
 		when(departmentService.getAllDepartments()).thenReturn(list);
-		List<Department> departmentList = DepartmentController.getAllDepartment();
+		List<Department> departmentList = departmentController.getAllDepartment();
 		Assert.assertEquals(list.size(), departmentList.size());
 		Assert.assertEquals(list, departmentList);
 		/*
@@ -141,7 +141,7 @@ public class DepartmentControllerTest {
 	@Test
 	public void testGetEmployee() {
 		when(departmentService.getDepartment(Mockito.anyInt())).thenReturn(departmentOne);
-		Department department = DepartmentController.getDepartment(7);
+		Department department = departmentController.getDepartment(7);
 		Assert.assertEquals(departmentOne.getDepartment_Name(), department.getDepartment_Name());
 		Assert.assertEquals(departmentOne.getShort_Name(), department.getShort_Name());
 		Assert.assertEquals(departmentOne.getDepartment_ID(), department.getDepartment_ID());
@@ -169,13 +169,13 @@ public class DepartmentControllerTest {
 	@Test(expected = DepartmentException.class)
 	public void testGetEmployeeDepaertmentException() {
 		when(departmentService.getDepartment(Mockito.anyInt())).thenReturn(departmentOne);
-		DepartmentController.getDepartment(-3);
+		departmentController.getDepartment(-3);
 	}
 
 	@Test
 	public void testAddEmployee() {
 		Mockito.doNothing().when(departmentService).addDepartment(Mockito.any(Department.class));
-		DepartmentController.addDepartment(departmentOne);
+		departmentController.addDepartment(departmentOne);
 		verify(departmentService, only()).addDepartment(Mockito.any(Department.class));
 		System.out.println("testAddEmployee");
 	}
@@ -184,7 +184,7 @@ public class DepartmentControllerTest {
 	public void testUpdateEmployee() {
 		when(departmentService.getDepartment(Mockito.anyInt())).thenReturn(departmentOne);
 		Mockito.doNothing().when(departmentService).updateDepartment(Mockito.<Department>any(), Mockito.anyInt());
-		DepartmentController.updateDepartment(departmentOne, 7);
+		departmentController.updateDepartment(departmentOne, 7);
 		verify(departmentService).getDepartment(Mockito.anyInt());
 		verify(departmentService).updateDepartment(Mockito.any(Department.class), Mockito.anyInt());
 		verifyNoMoreInteractions(departmentService);
@@ -193,14 +193,14 @@ public class DepartmentControllerTest {
 
 	@Test
 	public void testDeleteAllEmployees() {
-		DepartmentController.deleteAllDepartments();
+		departmentController.deleteAllDepartments();
 		verify(departmentService, only()).deleteAllDepartment();
 		System.out.println("testDeleteAllEmployees");
 	}
 
 	@Test
 	public void testDeleteEmployeeById() {
-		DepartmentController.deleteDepartmentByID(departmentOne, 7);
+		departmentController.deleteDepartmentByID(departmentOne, 7);
 		verify(departmentService, only()).deleteDepartmentByID(Mockito.anyInt());
 		System.out.println("testDeleteEmployeeById");
 	}
@@ -212,7 +212,7 @@ public class DepartmentControllerTest {
 	// @Ignore
 	@Test
 	public void testPatchEmployeeById() {
-		DepartmentController.patchDepartmentByID(departmentOne, 7);
+		departmentController.patchDepartmentByID(departmentOne, 7);
 		verify(departmentService, only()).patchDepartment(Mockito.any(Department.class), Mockito.anyInt());
 		System.out.println("testPatchEmployeeById");
 	}
@@ -228,7 +228,7 @@ public class DepartmentControllerTest {
 		DepartmentErrorCodes expectedErrorCode = DepartmentErrorCodes.DEPARTMENT_NAME_EXCEPTION;
 		try {
 			departmentThree = new Department(-4, "ABC Department", "ABC");
-			DepartmentController.addDepartment(departmentThree);
+			departmentController.addDepartment(departmentThree);
 		} catch (DepartmentException exception) {
 			//add comment
 			assertEquals(expectedErrorCode, exception.getErrorCodes());
