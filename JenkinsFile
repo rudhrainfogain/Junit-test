@@ -44,5 +44,11 @@ pipeline{
 				}
 			}
 		}
+		stage("Deploy to nexus"){
+		steps{
+			echo "deploy to nexus"
+			bat "mvn deploy -Dmaven.test.skip=true -s settings.xml"
+			}
+		}
 	}
 }
