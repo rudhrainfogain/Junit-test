@@ -371,4 +371,12 @@
 			</plugin>
 		</plugins>
 	</build>
+	<!--Distribution Management -->
+	<distributionManagement>
+		<repository>
+			<id>snapshot</id>
+			<name>Release Repo</name>
+			<url>http://localhost:8081/repository/snapshot/</url>
+		</repository>
+	</distributionManagement>
 </project>
